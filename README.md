@@ -28,22 +28,9 @@ git clone https://github.com/aarna02gupta-create/student-notes-manager.git
 cd student-notes-manager
 ```
 
-**The current upload has Java files at the repository root.** Before running Maven, organize your local copy into the package directories below. Create these directories and move each listed file there; keep `pom.xml` at the root.
+The source follows the standard Maven layout: `src/main/java`, `src/main/resources`, and `src/test/java`. No file rearrangement is needed.
 
-| Destination | Files |
-| --- | --- |
-| `src/main/java/com/student/notes/` | `NotesManagerApplication.java` |
-| `src/main/java/com/student/notes/controller/` | `NoteController.java` |
-| `src/main/java/com/student/notes/dto/` | `ApiResponseDTO.java`, `NoteRequestDTO.java` |
-| `src/main/java/com/student/notes/model/` | `Note.java` |
-| `src/main/java/com/student/notes/repository/` | `NoteRepository.java` |
-| `src/main/java/com/student/notes/service/` | `NoteService.java`, `NoteServiceImpl.java` |
-| `src/main/java/com/student/notes/exception/` | `NoteNotFoundException.java`, `GlobalExceptionHandler.java` |
-| `src/main/java/com/student/notes/config/` | `DataInitializer.java` |
-| `src/main/resources/` | `application.properties` |
-| `src/test/java/com/student/notes/` | `NotesManagerApplicationTests.java` |
-
-Then run:
+Run:
 
 ```bash
 mvn spring-boot:run
@@ -81,6 +68,6 @@ A successful create returns HTTP 201 and the saved note in the response's `data`
 
 ## Tests and limitations
 
-A JUnit/Spring Boot test class is included. After arranging the local source tree, run `mvn test`. This README documents the source; it does not claim that tests have been executed.
+Run `mvn test` to execute the included JUnit 5 service tests. They construct a fresh in-memory repository for each test; they do not exercise HTTP routing or request validation.
 
-This is a learning project without authentication or durable persistence. A clean Maven source layout and persistent storage are useful next improvements.
+This is a learning project without authentication or durable persistence. Useful next improvements are HTTP-level tests for valid/invalid requests and missing notes, followed by relational persistence when needed.

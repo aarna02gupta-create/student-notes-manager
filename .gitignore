@@ -1,0 +1,17 @@
+# Maven output and compiled Java
+**/target/
+*.class
+*.war
+*.log
+
+# Local IDE and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local credentials
+.env
+.env.*
+!.env.example
