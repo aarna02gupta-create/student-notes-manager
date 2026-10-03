@@ -68,6 +68,6 @@ A successful create returns HTTP 201 and the saved note in the response's `data`
 
 ## Tests and limitations
 
-Run `mvn test` to execute the included JUnit 5 service tests. They construct a fresh in-memory repository for each test; they do not exercise HTTP routing or request validation.
+Run `mvn test` to execute the JUnit 5 service tests and `NoteControllerHttpTests`. The HTTP tests use standalone MockMvc with the real controller, service, repository, validator, and exception advice. They cover CRUD, field validation and length boundaries, missing notes, malformed requests, unsupported methods/media types, and safe error responses. They do not open a network socket or verify full application wiring. Each test uses a fresh in-memory repository.
 
-This is a learning project without authentication or durable persistence. Useful next improvements are HTTP-level tests for valid/invalid requests and missing notes, followed by relational persistence when needed.
+This is a learning project without authentication or durable persistence. Useful next improvements are a CI check running `mvn test`, followed by relational persistence when needed.

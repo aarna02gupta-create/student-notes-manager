@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -49,12 +53,28 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Invalid JSON, route IDs, and missing query parameters are client errors.
+     */
+    @ExceptionHandler({HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class,
+            MissingServletRequestParameterException.class})
+    public ResponseEntity<ApiResponseDTO<Void>> handleBadRequest(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponseDTO.error("Invalid request body or parameters."));
+    }
+
+    /**
      * Handles all unexpected exceptions — returns 500 Internal Server Error.
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDTO<Void>> handleGenericException(Exception ex) {
+        // Preserve MVC's client-error statuses and protocol headers (for example Allow).
+        if (ex instanceof ErrorResponse error) {
+            return ResponseEntity.status(error.getStatusCode()).headers(error.getHeaders())
+                    .body(ApiResponseDTO.error("Invalid request body or parameters."));
+        }
         ApiResponseDTO<Void> response = ApiResponseDTO.error(
-                "An unexpected error occurred: " + ex.getMessage());
+                "An unexpected error occurred.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
